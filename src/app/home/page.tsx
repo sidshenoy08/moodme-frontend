@@ -7,7 +7,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', width: 200, description: 'Restaurant Name' },
@@ -19,7 +19,7 @@ const columns: GridColDef[] = [
 const paginationModel = { page: 0, pageSize: 10 };
 
 export default function Home() {
-    const [pageNumber, setPageNumber] = useState(0);
+    const [pageNumber, setPageNumber] = useState(1);
     const [limit, setLimit] = useState(10);
     const [selectedGrade, setSelectedGrade] = useState('');
     const [grades, setGrades] = useState([]);
@@ -30,12 +30,28 @@ export default function Home() {
             .then(response => response.json())
             .then((data) => setGrades(data))
             .catch((err) => console.log(err))
+    }, []);
 
-        fetch("http://localhost:8000/restaurants")
+    useEffect(() => {
+        fetch(`http://localhost:8000/restaurants?page_number=${pageNumber}&limit=${limit}`)
             .then(response => response.json())
             .then((data) => setRestaurants(data))
             .catch((err) => console.log(err))
-    }, []);
+    }, [pageNumber, limit, selectedGrade])
+
+    function handlePageChange(event: React.ChangeEvent<HTMLInputElement>) {
+        let pno: number = parseInt(event.target.value, 10);
+        if (!isNaN(pno)) {
+            setPageNumber(pno);
+        }
+    }
+
+    function handleLimitChange(event: React.ChangeEvent<HTMLInputElement>) {
+        let lim: number = parseInt(event.target.value, 10);
+        if (!isNaN(lim)) {
+            setLimit(lim);
+        }
+    }
 
     function handleGradeSelect(event: SelectChangeEvent) {
         setSelectedGrade(event.target.value as string);
@@ -43,13 +59,14 @@ export default function Home() {
 
     return (
         <div>
-            <TextField id="pageNumber" label="Page Number" variant="outlined" />
-            <TextField id="limit" label="Number of Restaurants" variant="outlined" />
+            <TextField id="pageNumber" label="Page Number" variant="outlined" onChange={handlePageChange} />
+            <TextField id="limit" label="Number of Restaurants" variant="outlined" onChange={handleLimitChange} />
             <InputLabel id="select-grade-label">Grade</InputLabel>
             <Select
                 labelId="select-grade-label"
                 id="select-grade"
                 label="Grade"
+                value={selectedGrade}
                 onChange={handleGradeSelect}
             >
                 {grades.map((grade: string, index: number) => <MenuItem value={grade}>{grade}</MenuItem>)}
