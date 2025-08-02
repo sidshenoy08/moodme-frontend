@@ -75,12 +75,14 @@ export default function Home() {
     // }
 
     return (
-        <div>
-            <TextField id="pageNumber" label="Page Number" variant="outlined" onChange={handlePageChange} />
-            <TextField id="limit" label="Number of Restaurants" variant="outlined" onChange={handleLimitChange} />
-            <TextField id="restaurantName" label="Restaurant Name" variant="outlined" onChange={handleRestaurantNameChange} />
-            <TextField id="address" label="Address" variant="outlined" onChange={handleAddressChange} />
-            <TextField id="cuisine" label="Cuisine" variant="outlined" onChange={handleCuisineChange} />
+        <div className="flex flex-col items-center justify-center space-y-6 bg-indigo-100 h-screen">
+            <div className="flex flex-wrap justify-center gap-4">
+                <TextField id="pageNumber" label="Page Number" variant="outlined" onChange={handlePageChange} />
+                <TextField id="limit" label="Number of Restaurants" variant="outlined" onChange={handleLimitChange} />
+                <TextField id="restaurantName" label="Restaurant Name" variant="outlined" onChange={handleRestaurantNameChange} />
+                <TextField id="address" label="Address" variant="outlined" onChange={handleAddressChange} />
+                <TextField id="cuisine" label="Cuisine" variant="outlined" onChange={handleCuisineChange} />
+            </div>
             {/* <InputLabel id="select-grade-label">Grade</InputLabel>
             <Select
                 labelId="select-grade-label"
